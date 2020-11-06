@@ -5,7 +5,9 @@ connect sbc to the network
 git clone this repository.
 
 Compile example-api-use
-```make -C examples-api-use```
+```
+make -C examples-api-use
+```
 
 apt install getmac jq
 
