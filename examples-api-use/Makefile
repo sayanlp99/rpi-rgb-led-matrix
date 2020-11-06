@@ -1,7 +1,7 @@
 CFLAGS=-Wall -O3 -g -Wextra -Wno-unused-parameter
 CXXFLAGS=$(CFLAGS)
-OBJECTS=pdx.o
-BINARIES=pdx
+OBJECTS=pdx.o scrolling-text-example.o
+BINARIES=pdx scrolling-text-example
 
 # Where our library resides. You mostly only need to change the
 # RGB_LIB_DISTRIBUTION, this is where the library is checked out.
@@ -21,6 +21,7 @@ demo : demo-main.o $(RGB_LIBRARY)
 	$(CXX) $< -o $@ $(LDFLAGS)
 	
 pdx : pdx.o
+scrolling-text-example : scrolling-text-example.o
 
 # All the binaries that have the same name as the object file.q
 % : %.o $(RGB_LIBRARY)
