@@ -2,6 +2,14 @@ Use Raspbian Lite OS for the process.
 
 connect sbc to the network
 
+Update raspbian
+```
+sudo apt-get update
+sudo apt update
+sudo apt upgrade -y
+sudo apt install git
+```
+
 git clone this repository.
 
 Compile example-api-use
