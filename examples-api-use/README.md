@@ -32,7 +32,7 @@ add `/home/pi/rpi-rgb-led-matrix/examples-api-use` in the path
 then add ```/home/pi/rpi-rgb-led-matrix/examples-api-use/displayPRICE.sh``` to the end of the line
 
 add to path by `sudo nano /etc/sudoers` at the end of line add
-```home/pi/rpi-rgb-led-matrix/examples-api-use/```
+```/home/pi/rpi-rgb-led-matrix/examples-api-use```
 
 install nodejs and npm 
 ```
