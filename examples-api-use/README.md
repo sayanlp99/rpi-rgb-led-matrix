@@ -28,7 +28,8 @@ navigate to cd etc\
 ```
 sudo nano profile
 ```
-add ```/home/pi/rpi-rgb-led-matrix/examples-api-use/displayPRICE.sh``` to the end of the line
+add `/home/pi/rpi-rgb-led-matrix/examples-api-use` in the path
+then add ```/home/pi/rpi-rgb-led-matrix/examples-api-use/displayPRICE.sh``` to the end of the line
 
 install nodejs and npm 
 ```
