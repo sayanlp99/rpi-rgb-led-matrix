@@ -7,7 +7,7 @@ Update raspbian
 sudo apt-get update
 sudo apt update
 sudo apt upgrade -y
-sudo apt install git
+sudo apt install git jq pip -y
 ```
 
 git clone this repository.
@@ -19,7 +19,6 @@ make -C examples-api-use
 
 ```
 sudo chmod +x displayPRICE.sh
-sudo apt install jq -y
 sudo pip install get-mac
 ```
 
