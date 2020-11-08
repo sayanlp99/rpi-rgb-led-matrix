@@ -55,14 +55,6 @@ do
         fi
 done
 
-ngrok_url=$(curl http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')
-echo $ngrok_url
-mac_address=$(getmac)
-echo $mac_address
-hit_url="http://sda.gssgtechsolution.com/addPiUrl.php?mac_address=${mac_address}&pi_url=${ngrok_url}"
-echo $hit_url
-upload_ngrok_url=$(curl $hit_url)
-echo $upload_ngrok_url
 fetchData
 echo $petrol_price
 while [ 1 ]
