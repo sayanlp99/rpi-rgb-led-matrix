@@ -84,6 +84,7 @@ do
                 if [ $current_hour -eq "6" ] && [ $current_minute -ge "15" ] && [ $current_minute -lt "30" ]; then
                         echo "DATA UPDATE IN PROGRESS. DO NOT TURN OFF DEVICE"
                         sudo scrolling-text-example -f /home/pi/rpi-rgb-led-matrix/examples-api-use/bahnsc.bdf --led-no-hardware-pulse --led-gpio-mapping=regular --led-rows=16 --led-cols=32 --led-chain=12   --led-parallel=1 --led-multiplexing=4 --led-pwm-lsb-nanoseconds 1700 -s 3 -y -4 -l 1 -C 255,0,0 --led-pixel-mapper="V-mapper:Z;Rotate:90" --led-brightness=100 "DATA UPDATE IN PROGRESS. DO NOT TURN OFF DEVICE"
+                        fetchData
                 elif [ $current_hour -eq "6" ] && [ $current_minute -ge "15" ] || [ $current_hour -gt "6" ]; then
                         echo  "ELSEIF"
                         sudo scrolling-text-example -f /home/pi/rpi-rgb-led-matrix/examples-api-use/bahnsc.bdf --led-no-hardware-pulse --led-gpio-mapping=regular --led-rows=16 --led-cols=32 --led-chain=12   --led-parallel=1 --led-multiplexing=4 --led-pwm-lsb-nanoseconds 1700 -s 3 -y -4 -l 1 -C 255,0,0 --led-pixel-mapper="V-mapper:Z;Rotate:90" --led-brightness=100 "DATA UPDATE IN PROGRESS. DO NOT TURN OFF DEVICE"
