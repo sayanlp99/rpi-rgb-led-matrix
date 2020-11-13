@@ -5,6 +5,7 @@ function fetchData(){
         base_url="http://sda.gssgtechsolution.com/esp.php?mac_address=${mac_address}"
         echo $base_url
         response_json=$(curl $base_url)
+        echo $response_json
         if [[ -z "$response_json" ]]; then
                 local_json=$(<response_from_server.json)
         else
@@ -36,6 +37,7 @@ function fetchData(){
                 diesel_price=$(echo $local_json | jq -r '.[0]["diesel_price"]')
                 xp_price=$(echo $local_json | jq -r '.[0]["xml_price"]')
                 update_date=$(echo $local_json | jq -r '.[0]["update_date"]')
+                msg=$(echo $local_json | jq -r '.[0]["msg"]')
         fi
 }
 online=1
@@ -51,10 +53,9 @@ do
                         echo "1: output_local_network.json exists."
                         online=0
                 fi
-                sudo pdx -f bahnsc.bdf --led-no-hardware-pulse --led-gpio-mapping=regular --led-rows=16 --led-cols=32 --led-chain=12   --led-parallel=1 --led-multiplexing=4 --led-pwm-lsb-nanoseconds 1700 --led-pixel-mapper="V-mapper:Z;Rotate:90" -y -3 -C 255,0,0 -d 7000 -t "NO LINK"
+                sudo pdx -f /home/pi/rpi-rgb-led-matrix/examples-api-use/bahnsc.bdf --led-no-hardware-pulse --led-gpio-mapping=regular --led-rows=16 --led-cols=32 --led-chain=12   --led-parallel=1 --led-multiplexing=4 --led-pwm-lsb-nanoseconds 1700 --led-pixel-mapper="V-mapper:Z;Rotate:90" -y -3 -C 255,0,0 -d 7000 -t "NO LINK"
         fi
 done
-
 fetchData
 echo $petrol_price
 while [ 1 ]
@@ -69,23 +70,24 @@ do
         echo $current_loc_time_sec
         if [[ $current_loc_date -eq $update_date ]]; then
                 echo "Same Date. All Perfect"
-                sudo pdx -f bahnsc.bdf --led-no-hardware-pulse --led-gpio-mapping=regular --led-rows=16 --led-cols=32 --led-chain=12   --led-parallel=1 --led-multiplexing=4 --led-pwm-lsb-nanoseconds 1700 --led-pixel-mapper="V-mapper:Z;Rotate:90" -y -3 -C 0,255,0 -d 7000 -t "PETROL     ${petrol_price}"
-                sudo pdx -f bahnsc.bdf --led-no-hardware-pulse --led-gpio-mapping=regular --led-rows=16 --led-cols=32 --led-chain=12   --led-parallel=1 --led-multiplexing=4 --led-pwm-lsb-nanoseconds 1700 --led-pixel-mapper="V-mapper:Z;Rotate:90" -y -3 -C 0,0,255 -d 7000 -t "DIESEL      ${diesel_price}"
-                sudo pdx -f bahnsc.bdf --led-no-hardware-pulse --led-gpio-mapping=regular --led-rows=16 --led-cols=32 --led-chain=12   --led-parallel=1 --led-multiplexing=4 --led-pwm-lsb-nanoseconds 1700 --led-pixel-mapper="V-mapper:Z;Rotate:90" -y -3 -C 255,0,0 -d 7000 -t "X-PRM        ${xp_price}"
+                sudo pdx -f /home/pi/rpi-rgb-led-matrix/examples-api-use/bahnsc.bdf --led-no-hardware-pulse --led-gpio-mapping=regular --led-rows=16 --led-cols=32 --led-chain=12   --led-parallel=1 --led-multiplexing=4 --led-pwm-lsb-nanoseconds 1700 --led-pixel-mapper="V-mapper:Z;Rotate:90" -y -3 -C 0,255,0 -d 7000 -t "PETROL:${petrol_price}"
+                sudo pdx -f /home/pi/rpi-rgb-led-matrix/examples-api-use/bahnsc.bdf --led-no-hardware-pulse --led-gpio-mapping=regular --led-rows=16 --led-cols=32 --led-chain=12   --led-parallel=1 --led-multiplexing=4 --led-pwm-lsb-nanoseconds 1700 --led-pixel-mapper="V-mapper:Z;Rotate:90" -y -3 -C 0,0,255 -d 7000 -t "DIESEL:${diesel_price}"
+                sudo pdx -f /home/pi/rpi-rgb-led-matrix/examples-api-use/bahnsc32.bdf --led-no-hardware-pulse --led-gpio-mapping=regular --led-rows=16 --led-cols=32 --led-chain=12   --led-parallel=1 --led-multiplexing=4 --led-pwm-lsb-nanoseconds 1700 --led-pixel-mapper="V-mapper:Z;Rotate:90" -y 2 -C 255,0,0 -d 7000 -t "SERVO  LUBRICANT"
         else
                 echo "Date Not Matching"
                 current_hour=`date +"%H"`
                 current_minute=`date +"%M"`
-                if [$current_hour -eq "6"] && [$current_minute -ge "15"] && [$current_minute -lt "30"]; then
+                if [ $current_hour -eq "6" ] && [ $current_minute -ge "15" ] && [ $current_minute -lt "30" ]; then
                         echo "DATA UPDATE IN PROGRESS. DO NOT TURN OFF DEVICE"
-                elif [$current_hour -eq "6"] && [$current_minute -ge "15"] || [$current_hour -gt "6"]; then
+                        fetchData
+                elif [ $current_hour -eq "6" ] && [ $current_minute -ge "15" ] || [ $current_hour -gt "6" ]; then
                         echo  "ELSEIF"
                         fetchData
                 else
                         echo "SHOWING LAST DATA< YET TO BE UPDATED"
-                        sudo pdx -f bahnsc.bdf --led-no-hardware-pulse --led-gpio-mapping=regular --led-rows=16 --led-cols=32 --led-chain=12   --led-parallel=1 --led-multiplexing=4 --led-pwm-lsb-nanoseconds 1700 --led-pixel-mapper="V-mapper:Z;Rotate:90" -y -3 -C 0,255,0 -d 7000 -t "PETROL     ${petrol_price}"
-                        sudo pdx -f bahnsc.bdf --led-no-hardware-pulse --led-gpio-mapping=regular --led-rows=16 --led-cols=32 --led-chain=12   --led-parallel=1 --led-multiplexing=4 --led-pwm-lsb-nanoseconds 1700 --led-pixel-mapper="V-mapper:Z;Rotate:90" -y -3 -C 0,0,255 -d 7000 -t "DIESEL      ${diesel_price}"
-                        sudo pdx -f bahnsc.bdf --led-no-hardware-pulse --led-gpio-mapping=regular --led-rows=16 --led-cols=32 --led-chain=12   --led-parallel=1 --led-multiplexing=4 --led-pwm-lsb-nanoseconds 1700 --led-pixel-mapper="V-mapper:Z;Rotate:90" -y -3 -C 255,0,0 -d 7000 -t "X-PRM        ${xp_price}"
+                        sudo pdx -f /home/pi/rpi-rgb-led-matrix/examples-api-use/bahnsc.bdf --led-no-hardware-pulse --led-gpio-mapping=regular --led-rows=16 --led-cols=32 --led-chain=12   --led-parallel=1 --led-multiplexing=4 --led-pwm-lsb-nanoseconds 1700 --led-pixel-mapper="V-mapper:Z;Rotate:90" -y -3 -C 0,255,0 -d 7000 -t "PETROL:${petrol_price}"
+                        sudo pdx -f /home/pi/rpi-rgb-led-matrix/examples-api-use/bahnsc.bdf --led-no-hardware-pulse --led-gpio-mapping=regular --led-rows=16 --led-cols=32 --led-chain=12   --led-parallel=1 --led-multiplexing=4 --led-pwm-lsb-nanoseconds 1700 --led-pixel-mapper="V-mapper:Z;Rotate:90" -y -3 -C 0,0,255 -d 7000 -t "DIESEL:${diesel_price}"
+                        sudo pdx -f /home/pi/rpi-rgb-led-matrix/examples-api-use/bahnsc32.bdf --led-no-hardware-pulse --led-gpio-mapping=regular --led-rows=16 --led-cols=32 --led-chain=12   --led-parallel=1 --led-multiplexing=4 --led-pwm-lsb-nanoseconds 1700 --led-pixel-mapper="V-mapper:Z;Rotate:90" -y 2 -C 255,0,0 -d 7000 -t "SERVO  LUBRICANT"
                 fi
         fi
 done
