@@ -2,7 +2,7 @@
 function fetchData(){
         mac_address=$(getmac)
         echo $mac_address
-        base_url="http://sda.gssgtechsolution.com/esp.php?mac_address=b8:27:eb:fe:73:49"
+        base_url="http://sda.gssgtechsolution.com/esp.php?mac_address=${mac_address}"
         echo $base_url
         response_json=$(curl $base_url)
         echo $response_json
